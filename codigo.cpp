@@ -16,6 +16,7 @@ void registroDatos(string nombres[], double notas[], int &cantidad);
 void reporteGeneral(string nombres[], double notas[], int cantidad);
 void estadisticasyConteo(double notas[], int cantidad);
 void cuadroHonor(string nombres[], double notas[], int cantidad);
+void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad);
 int main (){
     //Declaracion de variables necesarias para realizar los procesos - Arreglos para guardar la informacion 
     string nombres[50];
@@ -58,6 +59,10 @@ int main (){
             cuadroHonor(nombres, notas, cantidadActual);
 
             break;
+
+        case 5:
+
+            buscarEstudianteDetalle(nombres, notas, cantidadActual);
         }
 
 
@@ -202,5 +207,18 @@ void cuadroHonor(string nombres[], double notas[], int cantidad){
     
 }
 
+void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad) {
+   if (cantidad == 0){
+        cout << "No hay alumnos registrados." << endl;
+        return;
+    }
+
+    string buscado;
+    cout << "Nombre a buscar (escriba el nombre exacto): "; 
+    cin.ignore(); 
+    getline(cin, buscado);
+
+  
+}
 
 
