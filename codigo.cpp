@@ -15,6 +15,7 @@ void mostrarMenu();
 void registroDatos(string nombres[], double notas[], int &cantidad);
 void reporteGeneral(string nombres[], double notas[], int cantidad);
 void estadisticasyConteo(double notas[], int cantidad);
+void cuadroHonor(string nombres[], double notas[], int cantidad);
 int main (){
     //Declaracion de variables necesarias para realizar los procesos - Arreglos para guardar la informacion 
     string nombres[50];
@@ -49,6 +50,12 @@ int main (){
         case 3:
 
             estadisticasyConteo(notas, cantidadActual);
+
+            break;
+
+        case 4:
+
+            cuadroHonor(nombres, notas, cantidadActual);
 
             break;
         }
@@ -117,7 +124,6 @@ void registroDatos(string nombres[], double notas[], int &cantidad){
 
 }
 
-
 void reporteGeneral(string nombres[], double notas[], int cantidad){
 
     //Nos aseguramos que existan estudiantes y no dejar espacios vacios
@@ -148,3 +154,53 @@ void estadisticasyConteo(double notas[], int cantidad){
     cout << "Aprobados: " << apr << " | Supletorios: " << sup << " | Reprobados: " << rep << endl;
 }
     
+void cuadroHonor(string nombres[], double notas[], int cantidad){
+
+   if (cantidad == 0) {
+        cout << "No hay alumnos registrados." << endl;
+        return;
+    }
+
+    cout << "=======================================" << endl;
+    cout << "      CUADRO DE HONOR: TOP 3           " << endl;
+    cout << "=======================================" << endl;
+
+    // Todos empiezan en "falso" para no repetir al mismo alumno y "tacha" cuando el programa ya lo lea.
+    bool yaMostrado[50] = {false}; 
+
+    // Declaracion de la variable puestosAMostrar y una condicion para el TOP3
+    int puestosAMostrar;
+
+    if (cantidad < 3) {
+        puestosAMostrar = cantidad; // Si hay 1 o 2, mostramos 1 o 2
+    } else {
+        puestosAMostrar = 3; // Si hay 3 o más, mostramos el top 3
+    }
+
+    for (int puesto = 1; puesto <= puestosAMostrar; puesto++) {
+        //Declaracion de variables inicializandolos en nota imposible 
+        double notaMasAlta = -1;
+        int indiceMejor = -1;
+
+        // Buscamos en todo el arreglo quién tiene la nota más alta 
+        // y que NO haya sido mostrado todavía
+        for (int i = 0; i < cantidad; i++) {
+            if (notas[i] > notaMasAlta && yaMostrado[i] == false) {
+                notaMasAlta = notas[i];
+                indiceMejor = i;
+            }
+        }
+
+        // Si encontramos a alguien, lo mostramos y lo "marcamos"
+        if (indiceMejor != -1) {
+            cout << "PUESTO " << puesto << ": " << nombres[indiceMejor] 
+                 << " | Nota: " << notas[indiceMejor] << endl;
+            yaMostrado[indiceMejor] = true; // Marcamos para que no vuelva a salir
+        }
+    }
+    cout << "=======================================" << endl;
+    
+}
+
+
+
