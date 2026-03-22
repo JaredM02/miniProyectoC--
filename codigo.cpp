@@ -17,6 +17,8 @@ void reporteGeneral(string nombres[], double notas[], int cantidad);
 void estadisticasyConteo(double notas[], int cantidad);
 void cuadroHonor(string nombres[], double notas[], int cantidad);
 void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad);
+void eliminarEstudiante(string nombres[], double notas[], int &cantidad);
+
 int main (){
     //Declaracion de variables necesarias para realizar los procesos - Arreglos para guardar la informacion 
     string nombres[50];
@@ -63,6 +65,14 @@ int main (){
         case 5:
 
             buscarEstudianteDetalle(nombres, notas, cantidadActual);
+
+            break;
+
+        case 6:
+
+            eliminarEstudiante(nombres, notas, cantidadActual);
+
+            break;
         }
 
 
@@ -86,10 +96,10 @@ void mostrarMenu(){
     cout << "===== SISTEMA DE GESTION DE NOTAS PRO =====" << endl;
     cout << "1. INGRESE AL REGISTRO DE DATOS " << endl;
     cout << "2. VER LISTA DE ESTUDIANTES Y NOTAS " << endl;
-    cout << "3. VER ESTADISTICAS Y CONTEO DE APROBADOS/REPROBADOS/SUPLETORIOS " << endl;
+    cout << "3. VER PROMEDIO GENERAL Y CONTEO DE APROBADOS/REPROBADOS/SUPLETORIOS " << endl;
     cout << "4. CUADRO DE HONOR " << endl;
     cout << "5. BUSCAR ALUMNO POR NOMBRE "<< endl;
-    cout << "6. ELIMINAR ULTIMO REGISTRO " << endl;
+    cout << "6. ELIMINAR ESTUDIANTE" << endl;
     cout << "7. BORRAR TODOS LOS DATOS " << endl;
     cout << "8. Salir " << endl;
     cout << "Selecciones una opcion " << endl;
@@ -252,8 +262,38 @@ void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad) {
     // SI EL BUCLE TERMINA Y NO ENCONTRAMOS NADA:
     if (encontrado == false) {
         cout << "Error: El estudiante '" << buscado << "' no esta en la lista." << endl;
-        cout << "Asegurese de usar mayusculas minusculas y espacios correctamente." << endl;
+        cout << "Asegurese de usar mayusculas, minusculas y espacios correctamente." << endl;
     }
 }
 
+void eliminarEstudiante(string nombres[], double notas[], int &cantidad) {
+    //Escudo de seguridad
+    if (cantidad == 0) {
+        cout << "No hay estudiantes para eliminar." << endl;
+        return;
+    }
+    //Declaracion de variable e ingreso de cout para pedir en pantalla el estudiante que el usuario desea eliminar.
+    string buscado;
+    cout << "Ingrese el nombre exacto a eliminar: ";
+    cin.ignore();
+    getline(cin, buscado);
 
+    // Buscamos al estudiante con un for simple 
+    for (int i = 0; i < cantidad; i++) {
+        if (nombres[i] == buscado) {
+            
+            // Reemplazamos al que queremos borrar con los datos del ULTIMO de la lista
+            nombres[i] = nombres[cantidad - 1];
+            notas[i] = notas[cantidad - 1];
+
+            // Restamos 1 a la cantidad total
+            cantidad = cantidad - 1;
+
+            cout << "Estudiante eliminado exitosamente." << endl;
+            return; // Salimos de la función
+        }
+    }
+
+    // Si terminó el for y no entró al if:
+    cout << "No se encontro al estudiante." << endl;
+}
