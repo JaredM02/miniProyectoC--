@@ -77,12 +77,29 @@ void registroDatos(string nombres[], double notas[], int &cantidad){
     do {
         cout << "Ingrese la cantidad de estudiantes a registrar (1-50): ";
         cin >> cantidad;
-        if (cantidad < 0 || cantidad > 50 ){
+        if (cantidad < 1 || cantidad > 50 ){
             cout << "Rango no valido. Intente nuevamente. " << endl;
         }
     } while (cantidad < 1 || cantidad > 50); 
 
     //Bucle for para ingresar los nombres y guardarlas en el arreglo
+     for (int i = 0; i < cantidad; i++) {
+        cout << "Estudiante " << i + 1 << ":" << endl;
+        cout << "Nombre: ";
+        //Se ocupa cin.ignore para evitar espacios que la memoria del programa tenga.
+        cin.ignore();
+        //Usamos getline para poder leer mas de una palabra, es decir que el usuario pueda ingresar nombres completos.
+        getline (cin, nombres[i]);
+         
+        //Bucle do-while para validar asegurando que estemos dentro del rango y un if para mostrar un error de nota fuera de rango y 
+        //permita al usuario volver a ingresar la nota.
+        do {
+            cout << "Nota (0-10): ";
+            cin >> notas[i];
+            if (notas[i] < 0 || notas[i] > 10) { 
+                cout << "Nota invalida. La calificacion debe estar entre 0 y 10." << endl;
+            }
+        } while (notas[i] < 0 || notas[i] > 10);
+    }
 
- 
 }
