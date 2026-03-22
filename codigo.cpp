@@ -160,7 +160,7 @@ void estadisticasyConteo(double notas[], int cantidad){
 }
     
 void cuadroHonor(string nombres[], double notas[], int cantidad){
-
+    //Si aun no se registran estudiantes
    if (cantidad == 0) {
         cout << "No hay alumnos registrados." << endl;
         return;
@@ -208,17 +208,52 @@ void cuadroHonor(string nombres[], double notas[], int cantidad){
 }
 
 void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad) {
+    //Si aun no se registran estudiantes
    if (cantidad == 0){
         cout << "No hay alumnos registrados." << endl;
         return;
     }
-
+    //Declaracion de variable para la nueva funcion 
     string buscado;
     cout << "Nombre a buscar (escriba el nombre exacto): "; 
     cin.ignore(); 
     getline(cin, buscado);
 
-  
+    //Declaracion de Booleano necesario para que el programa encuentre el estudiante.
+    bool encontrado = false; // Variable para saber si lo hallamos
+
+    //Bucle para realizar los calculos y mostrar en pantalla los resultados de las condiciones.
+    for (int i = 0; i < cantidad; i++) {
+        //Condiciones para saber el estado de los estudiantes y encontrarlos.
+        if (nombres[i] == buscado) {
+            //Declaro variable para saber si rep, apro, supl.
+            string estado;
+
+            if (notas[i] >= 7) {
+                estado = "APROBADO";
+            } else if (notas[i] >= 5) {
+                estado = "SUPLETORIO";
+            } else {
+                estado = "REPROBADO";
+            }
+
+            // Se mostrara en pantalla el resultado
+            cout << "--- RESULTADO DE BUSQUEDA ---" << endl;
+            cout << "Estudiante : " << nombres[i] << endl;
+            cout << "Nota       : " << notas[i] << endl;
+            cout << "Estado     : " << estado << endl;
+            cout << "-----------------------------" << endl;
+            
+            encontrado = true;
+            return; // Salimos de la función porque ya lo encontramos
+        }
+    }
+
+    // SI EL BUCLE TERMINA Y NO ENCONTRAMOS NADA:
+    if (encontrado == false) {
+        cout << "Error: El estudiante '" << buscado << "' no esta en la lista." << endl;
+        cout << "Asegurese de usar mayusculas minusculas y espacios correctamente." << endl;
+    }
 }
 
 
