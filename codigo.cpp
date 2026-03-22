@@ -307,8 +307,22 @@ void eliminarEstudiante(string nombres[], double notas[], int &cantidad) {
 }
 
 void borrarDatos(int &cantidad) {
-    // Al resetear la cantidad a 0, el programa ignora los datos existentes, 
-    // dejando el sistema listo para nuevos registros.
-    cantidad = 0; 
-    cout << "Sistema vacio. Todos los registros han sido invalidados." << endl;
+    //Nos aseguramos que existan estudiantes o no
+   if (cantidad == 0) {
+        cout << "El sistema ya esta vacio." << endl;
+        return;
+    }
+    //Declaro variable para confirmar una accion 
+    char confirmar;
+    cout << "ESTA ACCION NO SE PUEDE DESHACER. ¿Borrar todo? (PRESIONE s para CONFIRMAR o n para ANULAR OPERACION): ";
+    cin >> confirmar;
+
+    //Condicion para detectar si el usuario realmente quiere borrar datos o no.
+
+    if (confirmar == 's' || confirmar == 'S') {
+        cantidad = 0;
+        cout << "Sistema vacio. Registros invalidados." << endl;
+    } else {
+        cout << "Operacion cancelada." << endl;
+    }
 }
