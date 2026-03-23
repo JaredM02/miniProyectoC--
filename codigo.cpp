@@ -29,7 +29,15 @@ int main (){
     int opcion;
     do{
         mostrarMenu();
-        cin >> opcion;
+        // Escudo para que el menu no se rompa.
+        // cin >> opcion devuelve "false" si el usuario mete una letra
+        while (!(cin >> opcion)) {
+            cout << "ERROR: Seleccione una opcion valida (1-8): ";
+            // Limpia el estado de error 
+            cin.clear(); 
+            // Borra la letra que causo el error
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        }
         if (opcion < 1 || opcion > 8 ){
 
             cout << "Opcion invalida. Ingrese nuevamente " << endl;
@@ -106,43 +114,60 @@ void mostrarMenu(){
 }
 
 void registroDatos(string nombres[], double notas[], int &cantidad) {
+    //Declaro vairable para operar
     int cantidadNueva;
-
-    //Validacion de la cantidad de estudiantes a registrar, mientras la cantidad seleccionada sea menor a 1 o mayor a 50
+    //Bucle para el ingreso de la cantidad de datos a querer ingresar.
     do {
-        cout << "Ingrese la cantidad de estudiantes a registrar. (Espacio disponible: " << 50 - cantidad << "): ";
-        cin >> cantidadNueva;
-
+        cout << "Ingrese la cantidad de estudiantes a registrar (Espacio disponible: " << 50 - cantidad << "): ";
+        
+        //Escudo para que cuando ingrese una letra en numero de estudiantes, el programa no se rompa.
+        while (!(cin >> cantidadNueva)) {
+            cout << "ERROR: Por favor ingrese un NUMERO entero: ";
+            // Limpia el estado de error
+            cin.clear(); 
+            // Borra la letra que causo el error
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        //Validacion de entrada
         if (cantidadNueva < 1 || (cantidad + cantidadNueva) > 50) {
             cout << "Error: No hay espacio suficiente o cantidad invalida." << endl;
         }
     } while (cantidadNueva < 1 || (cantidad + cantidadNueva) > 50);
-
-        //Se limpia el enter que se da
+    // cin.ignore() borra el "Enter" que dejo el ultimo cin >>
     cin.ignore();
-
-    // El bucle empieza desde donde se quedó la cantidad anterior
-    // El límite es la suma de lo que había + lo nuevo
+    // Define el nuevo tope del arreglo sumando los que ya existían más los nuevos.
     int limite = cantidad + cantidadNueva;
     
-    //Bucle for para ingresar los nombres/ notas con su validacion correspondiente y guardarlas en el arreglo
+    // El bucle inicia en 'cantidad' para no sobreescribir los alumnos previos
+    // y avanza hasta el nuevo 'limite' calculado.
     for (int i = cantidad; i < limite; i++) {
         cout << "Estudiante " << i + 1 << ":" << endl;
         cout << "Nombre: ";
+        // getline lee toda la linea incluyendo espacios
         getline(cin, nombres[i]);
 
+        //Bucle para ingresar notas con la validacion.
         do {
             cout << "Nota (0-10): ";
-            cin >> notas[i];
+            
+            //Escudo para la nota (EVITA LETRAS)
+            while (!(cin >> notas[i])) {
+                cout << "ERROR: Ingrese una calificacion numerica (0-10): ";
+                // Limpia el estado de error
+                cin.clear();
+                // Borra la letra que causo el error
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+            //Validacion para las notas
             if (notas[i] < 0 || notas[i] > 10) {
-                cout << "Nota invalida." << endl;
+                cout << "Nota invalida. Intente de nuevo." << endl;
             }
         } while (notas[i] < 0 || notas[i] > 10);
         
+        // cin.ignore() borra el "Enter" que dejo el ultimo cin >>
         cin.ignore();
     }
 
-    // ACTUALIZAMOS la cantidad real que vive en el main
     cantidad = cantidad + cantidadNueva;
     cout << "Registros agregados con exito." << endl;
 }
@@ -154,7 +179,7 @@ void reporteGeneral(string nombres[], double notas[], int cantidad){
         cout << "No hay estudiantes registrados." << endl; 
         return;
     }
-    cout << "---Listado de Estudiantes ---" << endl;
+    cout << "--- Listado de Estudiantes ---" << endl;
 
     //Bucle necesario para mostrar los estudiantes y sus notas de manera ordenada, por lo tal , tambien ocupamos el i+1
     for (int i = 0; i < cantidad; i++) {
@@ -163,15 +188,19 @@ void reporteGeneral(string nombres[], double notas[], int cantidad){
 }
 
 void estadisticasyConteo(double notas[], int cantidad){
+    //Nos aseguramos que existan o no estudiantes.
     if (cantidad == 0) return;
+    //Declaramos vairables a utilizar para operar.
     int apr = 0, sup = 0, rep = 0;
     double suma = 0;
+    //Bulce para contar la cantidad de estudiantes aprobados/reprobados/supletorios
     for (int i = 0; i < cantidad; i++) {
         suma = suma + notas[i];
         if (notas[i] >= 7) apr = apr + 1;
         else if (notas[i] >= 5) sup = sup + 1;
         else rep = rep + 1;
     }
+    //Mensaje en pantalla
     cout << "--- RESUMEN ---" << endl;
     cout << "Promedio Grupal: " << suma / cantidad << endl;
     cout << "Aprobados: " << apr << " | Supletorios: " << sup << " | Reprobados: " << rep << endl;
@@ -183,7 +212,7 @@ void cuadroHonor(string nombres[], double notas[], int cantidad){
         cout << "No hay alumnos registrados." << endl;
         return;
     }
-
+    //Mensaje en pantalla
     cout << "=======================================" << endl;
     cout << "      CUADRO DE HONOR: TOP 3           " << endl;
     cout << "=======================================" << endl;
@@ -200,6 +229,7 @@ void cuadroHonor(string nombres[], double notas[], int cantidad){
         puestosAMostrar = 3; // Si hay 3 o más, mostramos el top 3
     }
 
+    //Bucle para mostrar los estudiantes del cuadro de honor.
     for (int puesto = 1; puesto <= puestosAMostrar; puesto++) {
         //Declaracion de variables inicializandolos en nota imposible 
         double notaMasAlta = -1;
@@ -244,7 +274,7 @@ void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad) {
     for (int i = 0; i < cantidad; i++) {
         //Condiciones para saber el estado de los estudiantes y encontrarlos.
         if (nombres[i] == buscado) {
-            //Declaro variable para saber si rep, apro, supl.
+            //Declaro variable para saber si rep, apro, supl con su condicion especifica.
             string estado;
 
             if (notas[i] >= 7) {
@@ -269,6 +299,7 @@ void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad) {
 
     // SI EL BUCLE TERMINA Y NO ENCONTRAMOS NADA:
     if (encontrado == false) {
+        //Se muestra en pantalla el error que pudo cometer el usuario.
         cout << "Error: El estudiante '" << buscado << "' no esta en la lista." << endl;
         cout << "Asegurese de usar mayusculas, minusculas y espacios correctamente." << endl;
     }
@@ -277,6 +308,7 @@ void buscarEstudianteDetalle(string nombres[], double notas[], int cantidad) {
 void eliminarEstudiante(string nombres[], double notas[], int &cantidad) {
     //Escudo de seguridad
     if (cantidad == 0) {
+        //Se muestra en pantalla.
         cout << "No hay estudiantes para eliminar." << endl;
         return;
     }
@@ -297,8 +329,11 @@ void eliminarEstudiante(string nombres[], double notas[], int &cantidad) {
             // Restamos 1 a la cantidad total
             cantidad = cantidad - 1;
 
+            //Se mostrara en pantalla el resultado.
+
             cout << "Estudiante eliminado exitosamente." << endl;
-            return; // Salimos de la función
+            // Salimos de la función
+            return; 
         }
     }
 
@@ -309,20 +344,24 @@ void eliminarEstudiante(string nombres[], double notas[], int &cantidad) {
 void borrarDatos(int &cantidad) {
     //Nos aseguramos que existan estudiantes o no
    if (cantidad == 0) {
+        //Se muestra en pantalla
         cout << "El sistema ya esta vacio." << endl;
         return;
     }
     //Declaro variable para confirmar una accion 
     char confirmar;
-    cout << "ESTA ACCION NO SE PUEDE DESHACER. ¿Borrar todo? (PRESIONE s para CONFIRMAR o n para ANULAR OPERACION): ";
+    cout << "ESTA ACCION NO SE PUEDE DESHACER. Borrar todo? (PRESIONE s para CONFIRMAR o n para ANULAR OPERACION): ";
     cin >> confirmar;
 
     //Condicion para detectar si el usuario realmente quiere borrar datos o no.
 
     if (confirmar == 's' || confirmar == 'S') {
+        //Se resetean los datos a 0 para poder ingresar nueva informacion.
         cantidad = 0;
+        //Se muestra en pantalla
         cout << "Sistema vacio. Registros invalidados." << endl;
     } else {
+        //Se muestra en pantalla.
         cout << "Operacion cancelada." << endl;
     }
 }
