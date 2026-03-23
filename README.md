@@ -50,6 +50,17 @@ El proyecto está organizado de la siguiente manera:
 
 Proyecto desarrollado por **Martin Correa** como parte del proceso de aprendizaje en lógica de programación y C++ estructurado.
 
+## Instrucciones de Compilación y Ejecución
+
+Para ejecutar este proyecto en su ordenador, siga estos pasos:
+
+1. **Requisitos Previos:** Asegúrese de tener instalado un compilador de C++ (como GCC/MinGW) o un IDE (como VS Code, Dev-C++ o Code::Blocks).
+2. **Compilación:** * Si utiliza la terminal, ejecute el comando: 
+     `g++ codigo.cpp -o codigo`
+3. **Ejecución:**
+   * En Windows: `./codigo`
+4. **Uso:** Siga las instrucciones del menú interactivo en la consola para navegar por las 8 opciones del sistema.
+
 ## Observaciones
 
 * **Resiliencia:** El programa utiliza `numeric_limits` para prevenir bucles infinitos ante ingresos de datos no numéricos en el menú y las notas.
