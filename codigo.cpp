@@ -189,7 +189,10 @@ void reporteGeneral(string nombres[], double notas[], int cantidad){
 
 void estadisticasyConteo(double notas[], int cantidad){
     //Nos aseguramos que existan o no estudiantes.
-    if (cantidad == 0) return;
+    if (cantidad == 0){
+        cout << "No hay alumnos registrados." << endl;
+        return;
+    }
     //Declaramos vairables a utilizar para operar.
     int apr = 0, sup = 0, rep = 0;
     double suma = 0;
